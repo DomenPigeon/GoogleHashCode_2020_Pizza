@@ -20,7 +20,7 @@ namespace Drawing {
 
         public Program(Canvas canvas) {
             this._canvas = canvas;
-            _input = File.ReadAllLines("input.in");
+            _input = File.ReadAllLines("a");
             ParseInput();
         }
 
@@ -38,9 +38,9 @@ namespace Drawing {
         }
 
         private void ParseLibraries() {
-            Libraries = new Library[(_input.Length-2)/2];
+            Libraries = new Library[(_input.Length - 2) / 2];
             for (var i = 2; i < _input.Length; i += 2) {
-                var libraryID = i / 2;
+                var libraryID = i / 2 - 1;
                 var libraryData = _input[i].Split().Select(int.Parse).ToArray();
                 var libraryBooks = _input[i + 1].Split().Select(int.Parse).ToArray();
                 Libraries[libraryID] = new Library(libraryID, libraryData[0], libraryData[1], libraryData[2], libraryBooks);
@@ -49,6 +49,7 @@ namespace Drawing {
 
         public void Run() {
 //            _canvas.DefineTick(Tick());
+            Console.WriteLine();
         }
 
         private IEnumerable Tick() {
@@ -79,9 +80,15 @@ namespace Drawing {
             NumberOfBooks = numberOfBooks;
             SignUpTime = signUpTime;
             BooksPerDay = booksPerDay;
-            Books = books;
-            Value = CalculateValue();
+            Books = books.OrderBy(i => i).ToArray();
+            Value = 0;
+            Value = CalculateImportance();
         }
+
+        private int CalculateImportance() {
+            return Books.Sum() - Books.Take(SignUpTime).Sum();
+        }
+
     }
 
 }
