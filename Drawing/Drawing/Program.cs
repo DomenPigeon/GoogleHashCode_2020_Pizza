@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ namespace Drawing {
 
         private readonly Canvas _canvas;
         private readonly string[] _input;
+        private const string InputName = "f";
 
         private int _numberOfBooks;
         private int _numberOfLibraries;
@@ -20,7 +22,7 @@ namespace Drawing {
 
         public Program(Canvas canvas) {
             this._canvas = canvas;
-            _input = File.ReadAllLines("a");
+            _input = File.ReadAllLines(InputName);
             ParseInput();
         }
 
@@ -41,6 +43,7 @@ namespace Drawing {
             Libraries = new Library[(_input.Length - 2) / 2];
             for (var i = 2; i < _input.Length; i += 2) {
                 var libraryID = i / 2 - 1;
+                if (string.IsNullOrEmpty(_input[i])) break;
                 var libraryData = _input[i].Split().Select(int.Parse).ToArray();
                 var libraryBooks = _input[i + 1].Split().Select(int.Parse).ToArray();
                 Libraries[libraryID] = new Library(libraryID, libraryData[0], libraryData[1], libraryData[2], libraryBooks);
@@ -49,8 +52,20 @@ namespace Drawing {
 
         public void Run() {
 //            _canvas.DefineTick(Tick());
-            Console.WriteLine();
             new MihaelSolution().Run();
+            OrderLibraries();
+        }
+
+        private void OrderLibraries() {
+            Libraries = Libraries.OrderByDescending(l => l.Importance).ToArray();
+            var output = new List<string>();
+            output.Add(Libraries.Length.ToString());
+            for (int i = 0; i < Libraries.Length; i++) {
+                var lib = Libraries[i];
+                output.Add(string.Join(' ', lib.ID, lib.Books.Length));
+                output.Add(string.Join(' ', lib.Books));
+            }
+            File.WriteAllLines(InputName + ".out", output);
         }
 
         private IEnumerable Tick() {
@@ -74,16 +89,16 @@ namespace Drawing {
         public int BooksPerDay;
         public int[] Books;
 
-        public int Value;
+        public int Importance;
 
         public Library(int id, int numberOfBooks, int signUpTime, int booksPerDay, int[] books) {
             ID = id;
             NumberOfBooks = numberOfBooks;
             SignUpTime = signUpTime;
             BooksPerDay = booksPerDay;
-            Books = books.OrderBy(i => i).ToArray();
-            Value = 0;
-            Value = CalculateImportance();
+            Books = books.OrderByDescending(i => i).ToArray();
+            Importance = 0;
+            Importance = CalculateImportance();
         }
 
         private int CalculateImportance() {
