@@ -50,6 +50,7 @@ namespace Drawing {
         public void Run() {
 //            _canvas.DefineTick(Tick());
             Console.WriteLine();
+            new MihaelSolution().Run();
         }
 
         private IEnumerable Tick() {
