@@ -11,7 +11,7 @@ namespace Drawing {
 
         private readonly Canvas _canvas;
         private readonly string[] _input;
-        private const string InputName = "f";
+        private const string InputName = "b";
 
         private int _numberOfBooks;
         private int _numberOfLibraries;
@@ -102,7 +102,7 @@ namespace Drawing {
         }
 
         private int CalculateImportance() {
-            return Books.Sum() - Books.Take(SignUpTime).Sum();
+            return 1000 - SignUpTime;
         }
 
     }
