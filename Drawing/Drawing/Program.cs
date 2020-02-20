@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace Drawing {
@@ -15,6 +16,7 @@ namespace Drawing {
         private int _daysForScanning;
 
         private int[] _books;
+        private Library[] Libraries;
 
         public Program(Canvas canvas) {
             this._canvas = canvas;
@@ -23,7 +25,26 @@ namespace Drawing {
         }
 
         private void ParseInput() {
-            
+            var firstLine = _input[0].Split();
+            var secondLine = _input[1].Split();
+
+            _numberOfBooks = int.Parse(firstLine[0]);
+            _numberOfLibraries = int.Parse(firstLine[1]);
+            _daysForScanning = int.Parse(firstLine[2]);
+
+            _books = secondLine.Select(int.Parse).ToArray();
+
+            ParseLibraries();
+        }
+
+        private void ParseLibraries() {
+            Libraries = new Library[(_input.Length-2)/2];
+            for (var i = 2; i < _input.Length; i += 2) {
+                var libraryID = i / 2;
+                var libraryData = _input[i].Split().Select(int.Parse).ToArray();
+                var libraryBooks = _input[i + 1].Split().Select(int.Parse).ToArray();
+                Libraries[libraryID] = new Library(libraryID, libraryData[0], libraryData[1], libraryData[2], libraryBooks);
+            }
         }
 
         public void Run() {
@@ -46,17 +67,21 @@ namespace Drawing {
     public struct Library {
 
         public int ID;
-        public int SignUp;
+        public int NumberOfBooks;
+        public int SignUpTime;
         public int BooksPerDay;
         public int[] Books;
 
-        public Library(int id, int signUp, int booksPerDay, int[] books) {
+        public int Value;
+
+        public Library(int id, int numberOfBooks, int signUpTime, int booksPerDay, int[] books) {
             ID = id;
-            SignUp = signUp;
+            NumberOfBooks = numberOfBooks;
+            SignUpTime = signUpTime;
             BooksPerDay = booksPerDay;
             Books = books;
+            Value = CalculateValue();
         }
-
     }
 
 }
