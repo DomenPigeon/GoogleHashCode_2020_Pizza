@@ -6,36 +6,38 @@ using System.Linq;
 using System.Windows.Controls;
 
 namespace Drawing {
-
     public class Program {
-
-        private readonly Canvas _canvas;
+        private          bool     isglobal;
+        private readonly Canvas   _canvas;
         private readonly string[] _input;
-        private const string InputName = "d";
+        private const    string   InputName = "e";
 
         private int _numberOfBooks;
         private int _numberOfLibraries;
         private int _daysForScanning;
 
-        private int[] _books;
-        private List<Library> Libraries = new List<Library>();
+        private List<Book>    _books                = new List<Book>();
+        private List<Library> Libraries             = new List<Library>();
         private List<Library> _resultingLibraryList = new List<Library>();
 
         public Program(Canvas canvas) {
-            this._canvas = canvas;
-            _input = File.ReadAllLines(InputName);
+            _canvas = canvas;
+            _input  = File.ReadAllLines(InputName);
             ParseInput();
         }
 
         private void ParseInput() {
-            var firstLine = _input[0].Split();
+            var firstLine  = _input[0].Split();
             var secondLine = _input[1].Split();
 
-            _numberOfBooks = int.Parse(firstLine[0]);
+            _numberOfBooks     = int.Parse(firstLine[0]);
             _numberOfLibraries = int.Parse(firstLine[1]);
-            _daysForScanning = int.Parse(firstLine[2]);
+            _daysForScanning   = int.Parse(firstLine[2]);
 
-            _books = secondLine.Select(int.Parse).ToArray();
+            var books = secondLine.Select(int.Parse).ToArray();
+            for (var i = 0; i < books.Length; i++) {
+                _books.Add(new Book(i, books[i], ref _books));
+            }
 
             ParseLibraries();
         }
@@ -46,46 +48,81 @@ namespace Drawing {
                 var libraryID = i / 2 - 1;
                 if (string.IsNullOrEmpty(_input[i])) break;
                 var libraryData = _input[i].Split().Select(int.Parse).ToArray();
-                var libraryBooks = _input[i + 1].Split().Select(int.Parse).ToArray();
-                Libraries.Add(new Library(libraryID, libraryData[0], libraryData[1], libraryData[2], libraryBooks));
+                var booksData   = _input[i + 1].Split().Select(int.Parse).ToArray();
+
+                var books = new Book[booksData.Length];
+                for (var j = 0; j < booksData.Length; j++) {
+                    books[j] = _books[booksData[j]];
+                }
+
+                var lib = new Library(libraryID, libraryData[0], libraryData[1], libraryData[2], books, ref Libraries);
+                lib.CalculateImportance(_daysForScanning);
+                Libraries.Add(lib);
             }
         }
 
         public void Run() {
-//            _canvas.DefineTick(CanvasTick());
+            // _canvas.DefineTick(CanvasTick());
+
+            var     signedUpLibraries = new List<Library>();
+            Library librarySigningUp  = null;
             for (var i = 0; i < _daysForScanning; i++) {
-                Tick();
+                Tick(_daysForScanning - i);
+                if (i % 100 == 0)
+                    Console.WriteLine($"{i}/{_daysForScanning}");
             }
-            GenerateOutput(_resultingLibraryList);
 
-            void Tick() {
-                var bestLibrary = Libraries.OrderByDescending(l => l.Importance).First();
-                var duplicateID = bestLibrary.ID % 2 == 0 ? bestLibrary.ID + 1 : bestLibrary.ID;
-                try {
-                    Libraries.Remove(Libraries.Single(l => l.ID == duplicateID));
-                    Libraries.Remove(bestLibrary);
-                } catch (Exception e) {
+            GenerateOutput();
 
+            void Tick(int daysLeft) {
+                PassDayForEachSignedUpLibrary();
+                FindNewBestLibrary(daysLeft);
+                librarySigningUp?.DayPasses();
+            }
+
+            void UpdateImportanceForAllLibraries(int daysLeft) {
+                foreach (var library in Libraries) {
+                    library.CalculateImportance(daysLeft);
                 }
-                _resultingLibraryList.Add(bestLibrary);
-                UpdateImportanceForAllLibraries(bestLibrary.Books);
+            }
+
+            void PassDayForEachSignedUpLibrary() {
+                foreach (var library in signedUpLibraries) {
+                    library.DayPasses();
+                }
+            }
+
+            void FindNewBestLibrary(int daysLeft) {
+                if (Libraries.Count < 1) return;
+                if (librarySigningUp == null || librarySigningUp.SignedUp) {
+                    if (librarySigningUp != null && librarySigningUp.SignedUp) {
+                        librarySigningUp.DayPasses();
+                        signedUpLibraries.Add(librarySigningUp);
+                    }
+
+                    UpdateImportanceForAllLibraries(daysLeft);
+                    librarySigningUp = Libraries.OrderByDescending(l => l.Importance).First();
+                    Libraries.Remove(librarySigningUp);
+                    _resultingLibraryList.Add(librarySigningUp);
+                }
             }
         }
 
-        private void UpdateImportanceForAllLibraries(List<int> books) {
-            foreach (var library in Libraries) {
-                library.UpdateImportance(books);
+        private void GenerateOutput() {
+            var output            = new List<string>();
+            var notEmptyLibraries = new List<Library>();
+            foreach (var library in _resultingLibraryList) {
+                if (library.ScannedBooks.Count > 0)
+                    notEmptyLibraries.Add(library);
             }
-        }
 
-        private void GenerateOutput(List<Library> libraries) {
-            var output = new List<string>();
-            output.Add(libraries.Count.ToString());
-            for (int i = 0; i < libraries.Count; i++) {
-                var lib = libraries[i];
-                output.Add(string.Join(' ', lib.ID, lib.Books.Count));
-                output.Add(string.Join(' ', lib.Books));
+            output.Add(notEmptyLibraries.Count.ToString());
+            for (int i = 0; i < notEmptyLibraries.Count; i++) {
+                var lib = notEmptyLibraries[i];
+                output.Add(string.Join(' ', lib.ID, lib.ScannedBooks.Count));
+                output.Add(string.Join(' ', lib.ScannedBooks));
             }
+
             File.WriteAllLines(InputName + ".out", output);
         }
 
@@ -96,45 +133,97 @@ namespace Drawing {
             }
         }
 
-        private void OneTick() {
-
-        }
-
+        private void OneTick() { }
     }
 
-    public struct Library {
+    public class Book {
+        public int        ID;
+        public int        Score;
+        public bool       Scanned;
+        public List<Book> AllBooks;
 
-        public int ID;
-        public int NumberOfBooks;
-        public int SignUpTime;
-        public int BooksPerDay;
-        public List<int> Books;
-
-        public int Importance;
-
-        public Library(int id, int numberOfBooks, int signUpTime, int booksPerDay, int[] books) {
-            ID = id;
-            NumberOfBooks = numberOfBooks;
-            SignUpTime = signUpTime;
-            BooksPerDay = booksPerDay;
-            Books = books.OrderByDescending(i => i).ToList();
-            Importance = 0;
-            Importance = CalculateImportance();
+        public Book(int id, int score, ref List<Book> allBooks) {
+            ID       = id;
+            Score    = score;
+            Scanned  = false;
+            AllBooks = allBooks;
         }
 
-        private int CalculateImportance() {
-            return Books.Count;
+        public bool Scan() {
+            if (AllBooks[ID].Scanned) return false;
+
+            Scanned = true;
+            return true;
         }
 
-        public void UpdateImportance(List<int> scannedBooks) {
-            foreach (var book in scannedBooks) {
-                if (Books.Contains(book)) {
-                    Books.Remove(book);
-                }
+        public override string ToString() {
+            return ID.ToString();
+        }
+    }
+
+    public class Library {
+        public readonly int           ID;
+        public readonly int           NumberOfBooks;
+        public readonly int           SignUpTime;
+        public readonly int           BooksPerDay;
+        public readonly List<Book>    ScannedBooks;
+        public readonly List<Book>    ReadOnlyBooks;
+        public readonly List<Library> Libraries;
+        public          List<Book>    Books;
+        public          int           Importance;
+        public          bool          SignedUp;
+        public          int           TimeLeftToSignUp;
+
+        public Library(int    id, int numberOfBooks, int signUpTime, int booksPerDay, Book[] books,
+            ref List<Library> libraries) {
+            ID               = id;
+            NumberOfBooks    = numberOfBooks;
+            SignUpTime       = signUpTime;
+            BooksPerDay      = booksPerDay;
+            ReadOnlyBooks    = books.ToList();
+            Books            = books.OrderByDescending(b => b.Score).ToList();
+            SignedUp         = false;
+            TimeLeftToSignUp = signUpTime;
+            Importance       = 0;
+            ScannedBooks     = new List<Book>();
+            Libraries        = libraries;
+        }
+
+        public bool DayPasses() {
+            if (SignedUp) {
+                ScanNewBook();
+                return true;
             }
-            Importance = Books.Count;
+            else {
+                Registering();
+                return false;
+            }
         }
 
-    }
+        private void Registering() {
+            TimeLeftToSignUp--;
+            if (TimeLeftToSignUp < 1)
+                SignedUp = true;
+        }
 
+        private void ScanNewBook() {
+            if (Books.Count < 1) return;
+            while (!Books[0].Scan()) {
+                Books.Remove(Books[0]);
+                if (Books.Count < 1) return;
+            }
+
+            ScannedBooks.Add(Books[0]);
+        }
+
+        public void CalculateImportance(int daysLeft) {
+            // var scoreSum = 0;
+            // foreach (var book in Books) {
+            //     scoreSum += book.Score;
+            // }
+
+            var daysForScanning = daysLeft - SignUpTime;
+            Importance = Books.Where(b => b.Scanned == false).Take(daysForScanning).Sum(b => b.Score);
+        }
+    }
 }

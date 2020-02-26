@@ -8,25 +8,25 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\domen.golob\\.nuget\\packages\\": {},
+    "C:\\Users\\DOMEN\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj",
+      "projectUniqueName": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
       "projectName": "Drawing",
-      "projectPath": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj",
-      "packagesPath": "C:\\Users\\domen.golob\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\obj\\",
+      "projectPath": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
+      "packagesPath": "C:\\Users\\DOMEN\\.nuget\\packages\\",
+      "outputPath": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\domen.golob\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\DOMEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
