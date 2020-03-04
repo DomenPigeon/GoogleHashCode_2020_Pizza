@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj": {}
+    "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj": {}
   },
   "projects": {
-    "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj": {
+    "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj",
+        "projectUniqueName": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
         "projectName": "Drawing",
-        "projectPath": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\Drawing.csproj",
+        "projectPath": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
         "packagesPath": "C:\\Users\\domen.golob\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\domen.golob\\Desktop\\Algorithm_Utils\\Drawing\\Drawing\\obj\\",
+        "outputPath": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet",

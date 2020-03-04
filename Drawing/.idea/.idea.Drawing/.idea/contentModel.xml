@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\DOMEN\.Rider2019.1\config\scratches" t="IncludeRecursive" />
-    <e p="C:\Users\DOMEN\.Rider2019.1\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\DOMEN\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_Drawing.-1526334840.00" t="ExcludeRecursive" />
-    <e p="D:\Desktop\GoogleHashCode_2020_Pizza\Drawing" t="IncludeFlat">
+    <e p="C:\Users\domen.golob\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\domen.golob\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_Drawing.2105331208.00" t="ExcludeRecursive" />
+    <e p="C:\Users\domen.golob\Desktop\HashCode\GoogleHashCode_2020_Pizza\Drawing" t="IncludeFlat">
       <e p="Drawing" t="IncludeRecursive">
         <e p="App.xaml" t="Include" />
         <e p="App.xaml.cs" t="Include" />

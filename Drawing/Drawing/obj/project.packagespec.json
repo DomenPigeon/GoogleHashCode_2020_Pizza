@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
+    "projectUniqueName": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
     "projectName": "Drawing",
-    "projectPath": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
-    "outputPath": "D:\\Desktop\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\obj\\",
+    "projectPath": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\Drawing.csproj",
+    "outputPath": "C:\\Users\\domen.golob\\Desktop\\HashCode\\GoogleHashCode_2020_Pizza\\Drawing\\Drawing\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Microsoft\\Xamarin\\NuGet",
